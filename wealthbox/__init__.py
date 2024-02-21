@@ -8,7 +8,7 @@ class WealthBox(object):
         self.token = token
         self.base_url = f"https://api.crmworkspace.com/v1/"
     
-   def api_request(self, endpoint, params=None):
+    def api_request(self, endpoint, params=None):
         url = self.base_url + endpoint
         page = 1
         total_pages = 9999999999

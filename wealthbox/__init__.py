@@ -11,19 +11,30 @@ class WealthBox(object):
     
     def api_request(self, endpoint, params=None):
         url = self.base_url + endpoint
-        if params is None: params = {}
-
-        params.setdefault('per_page','5000')
-
-        res = requests.get(url,
-            params = params,
-            headers={'ACCESS_TOKEN':self.token})
+        page = 1
+        total_pages = 9999999999
+        if params is None:
+            params = {}
         
-        try:
-            return res.json()
-        except JSONDecodeError:
-            return res.text
+        params.setdefault('per_page', '5000')
+        results = []
 
+        while page <= total_pages:
+            params['page'] = page
+            res = requests.get(url,
+                            params=params,
+                            headers={'ACCESS_TOKEN': self.token})
+            try:
+                res_json = res.json()
+                total_pages = res_json['meta']['total_pages']
+                results.extend(res_json[endpoint])
+                page += 1
+            except:# JSONDecodeError:
+                print(res.text)
+                return results
+
+        return results
+       
     def get_contacts(self, filters=None):
         return self.api_request('contacts',params=filters)
 

@@ -1,7 +1,7 @@
 from json import JSONDecodeError
 import requests
 
-__version__ = '0.1.0'
+__version__ = '0.3.2'
 
 class WealthBox(object):
     def __init__(self, token=None):
@@ -27,13 +27,24 @@ class WealthBox(object):
             try:
                 res_json = res.json()
                 total_pages = res_json['meta']['total_pages']
-                results.extend(res_json[endpoint])
+                # The WB API usually (always?) returns a list of results under a key with the same name as the endpoint
+                results.extend(res_json[endpoint.split('/')[-1]]) 
                 page += 1
-            except:# JSONDecodeError:
-                print(res.text)
-                return results
+            except JSONDecodeError:
+                return f"Error Decoding: {res.text}"
 
         return results
+    
+    def api_post(self, endpoint, data):
+        url = self.base_url + endpoint
+        res = requests.post(url,
+                            json=data,
+                            headers={'ACCESS_TOKEN': self.token})
+        try:
+            res_json = res.json()
+        except JSONDecodeError:
+            return f"Error Decoding: {res.text}"
+        return res.json()
        
     def get_contacts(self, filters=None):
         return self.api_request('contacts',params=filters)
@@ -49,10 +60,19 @@ class WealthBox(object):
         if self.user_id is None:
             self.get_my_user_id()
         return self.get_tasks({'assigned_to':self.user_id})
+
+    def get_custom_fields(self,document_type=None):
+        if document_type:
+            params = {'document_type':document_type}
+        else:
+            params = None
+        return self.api_request('categories/custom_fields',params=params)
     
-    def update_contact(self,contact_id,updates_dict):
+    def update_contact(self,contact_id,updates_dict,custom_field=None):
         # Update a contact in WealthBox with a given ID and field data
         res = requests.put(self.base_url + f'contacts/{contact_id}',
                             json=updates_dict,
                             headers={'ACCESS_TOKEN': self.token})
+        #TODO: Add custom field update
         return res.json()
+

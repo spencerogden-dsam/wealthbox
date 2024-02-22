@@ -49,3 +49,10 @@ class WealthBox(object):
         if self.user_id is None:
             self.get_my_user_id()
         return self.get_tasks({'assigned_to':self.user_id})
+    
+    def update_contact(self,contact_id,updates_dict):
+        # Update a contact in WealthBox with a given ID and field data
+        res = requests.put(self.base_url + f'contacts/{contact_id}',
+                            json=updates_dict,
+                            headers={'ACCESS_TOKEN': self.token})
+        return res.json()

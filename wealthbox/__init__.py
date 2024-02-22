@@ -70,9 +70,8 @@ class WealthBox(object):
     
     def update_contact(self,contact_id,updates_dict,custom_field=None):
         # Update a contact in WealthBox with a given ID and field data
-        res = requests.put(self.base_url + f'contacts/{contact_id}',
-                            json=updates_dict,
-                            headers={'ACCESS_TOKEN': self.token})
         #TODO: Add custom field update
-        return res.json()
-
+        return self.api_post(f'contacts/{contact_id}',updates_dict)
+        
+        
+        

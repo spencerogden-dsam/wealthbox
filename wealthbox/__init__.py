@@ -35,9 +35,9 @@ class WealthBox(object):
 
         return results
     
-    def api_post(self, endpoint, data):
+    def api_put(self, endpoint, data):
         url = self.base_url + endpoint
-        res = requests.post(url,
+        res = requests.put(url,
                             json=data,
                             headers={'ACCESS_TOKEN': self.token})
         try:
@@ -71,7 +71,7 @@ class WealthBox(object):
     def update_contact(self,contact_id,updates_dict,custom_field=None):
         # Update a contact in WealthBox with a given ID and field data
         #TODO: Add custom field update
-        return self.api_post(f'contacts/{contact_id}',updates_dict)
+        return self.api_put(f'contacts/{contact_id}',updates_dict)
         
         
         

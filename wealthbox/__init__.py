@@ -51,6 +51,58 @@ class WealthBox(object):
 
     def get_tasks(self, filters=None):
         return self.api_request('tasks',params=filters)
+    
+    def get_workflows(self, resource_id=None, resource_type=None, status=None):
+        params = {}
+        if resource_id:
+            params['resource_id'] = resource_id
+        if resource_type:
+            params['resource_type'] = resource_type
+        if status:
+            params['status'] = status
+        return self.api_request('workflows',params=params)
+    
+    def get_events(self, resource_id=None, resource_type=None):
+        params = {}
+        if resource_id:
+            params['resource_id'] = resource_id
+        if resource_type:
+            params['resource_type'] = resource_type
+        return self.api_request('events',params=params)
+    
+    def get_opportunities(self, resource_id=None, resource_type=None, order='asc', include_closed=True):
+        params = {}
+        if resource_id:
+            params['resource_id'] = resource_id
+        if resource_type:
+            params['resource_type'] = resource_type
+        if order:
+            params['order'] = order
+        if include_closed:
+            params['include_closed'] = include_closed
+        return self.api_request('opportunities',params=params)
+    
+    def get_notes(self, resource_id=None, resource_type=None,order="asc"):
+        params = {}
+        if resource_id:
+            params['resource_id'] = resource_id
+        if resource_type:
+            params['resource_type'] = resource_type
+        return self.api_request('notes',params=params)
+
+    def get_tags(self, document_type=None):
+        params = {}
+        if document_type:
+            params['document_type'] = document_type
+        return self.api_request('categories/tags',params=params)
+    
+    def get_comments(self, resource_id=None, resource_type=None):
+        params = {}
+        if resource_id:
+            params['resource_id'] = resource_id
+        if resource_type:
+            params['resource_type'] = resource_type
+        return self.api_request('comments',params=params)
 
     def get_my_user_id(self):
         self.user_id = self.api_request('me')['current_user']['id']

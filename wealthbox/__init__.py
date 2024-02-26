@@ -26,7 +26,10 @@ class WealthBox(object):
                             headers={'ACCESS_TOKEN': self.token})
             try:
                 res_json = res.json()
-                total_pages = res_json['meta']['total_pages']
+                if 'meta' not in res_json:
+                    total_pages = 1
+                else:
+                    total_pages = res_json['meta']['total_pages']
                 # The WB API usually (always?) returns a list of results under a key with the same name as the endpoint
                 results.extend(res_json[endpoint.split('/')[-1]]) 
                 page += 1
@@ -105,6 +108,7 @@ class WealthBox(object):
         return self.api_request('comments',params=params)
 
     def get_my_user_id(self):
+        #This endpoint doesn't have a 'meta'?
         self.user_id = self.api_request('me')['current_user']['id']
         return self.user_id
 

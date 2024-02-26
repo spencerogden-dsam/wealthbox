@@ -110,7 +110,7 @@ class WealthBox(object):
 
     def get_my_user_id(self):
         #This endpoint doesn't have a 'meta'?
-        self.user_id = self.api_request('me')['current_user']['id']
+        self.user_id = self.api_request('me')['id']
         return self.user_id
 
     def get_my_tasks(self):

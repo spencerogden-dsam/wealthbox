@@ -28,10 +28,11 @@ class WealthBox(object):
                 res_json = res.json()
                 if 'meta' not in res_json:
                     total_pages = 1
+                    results.extend(res_json)
                 else:
                     total_pages = res_json['meta']['total_pages']
-                # The WB API usually (always?) returns a list of results under a key with the same name as the endpoint
-                results.extend(res_json[endpoint.split('/')[-1]]) 
+                    # The WB API usually (always?) returns a list of results under a key with the same name as the endpoint
+                    results.extend(res_json[endpoint.split('/')[-1]]) 
                 page += 1
             except JSONDecodeError:
                 return f"Error Decoding: {res.text}"

@@ -28,7 +28,7 @@ class WealthBox(object):
                 res_json = res.json()
                 if 'meta' not in res_json:
                     total_pages = 1
-                    results.extend(res_json)
+                    results = res_json
                 else:
                     total_pages = res_json['meta']['total_pages']
                     # The WB API usually (always?) returns a list of results under a key with the same name as the endpoint

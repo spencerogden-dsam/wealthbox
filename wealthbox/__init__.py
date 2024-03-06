@@ -32,7 +32,11 @@ class WealthBox(object):
                 else:
                     total_pages = res_json['meta']['total_pages']
                     # The WB API usually (always?) returns a list of results under a key with the same name as the endpoint
-                    results.extend(res_json[endpoint.split('/')[-1]]) 
+                    try:
+                        results.extend(res_json[endpoint.split('/')[-1]]) 
+                    except KeyError:
+                        print(f"Error: {res_json}")
+                        return f"Error: {res.text}"
                 page += 1
             except JSONDecodeError:
                 return f"Error Decoding: {res.text}"
@@ -110,7 +114,7 @@ class WealthBox(object):
 
     def get_my_user_id(self):
         #This endpoint doesn't have a 'meta'?
-        self.user_id = self.api_request('me')['id']
+        self.user_id = self.api_request('me')['current_user']['id']
         return self.user_id
 
     def get_my_tasks(self):

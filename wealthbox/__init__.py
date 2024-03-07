@@ -8,8 +8,13 @@ class WealthBox(object):
         self.token = token
         self.user_id = None
         self.base_url = f"https://api.crmworkspace.com/v1/"
+
+    def raw_request(self,url_completion):
+        url = self.base_url + url_completion
+        res = requests.get(url,headers={'ACCESS_TOKEN': self.token})
+        return res
     
-    def api_request(self, endpoint, params=None):
+    def api_request(self, endpoint, params=None, extract_key=None):
         url = self.base_url + endpoint
         page = 1
         total_pages = 9999999999
@@ -18,6 +23,8 @@ class WealthBox(object):
         
         params.setdefault('per_page', '5000')
         results = []
+
+        extract_key = extract_key if extract_key is not None else endpoint
 
         while page <= total_pages:
             params['page'] = page
@@ -33,7 +40,7 @@ class WealthBox(object):
                     total_pages = res_json['meta']['total_pages']
                     # The WB API usually (always?) returns a list of results under a key with the same name as the endpoint
                     try:
-                        results.extend(res_json[endpoint.split('/')[-1]]) 
+                        results.extend(res_json[extract_key.split('/')[-1]]) 
                     except KeyError:
                         print(f"Error: {res_json}")
                         return f"Error: {res.text}"
@@ -90,13 +97,12 @@ class WealthBox(object):
             params['include_closed'] = include_closed
         return self.api_request('opportunities',params=params)
     
-    def get_notes(self, resource_id=None, resource_type=None,order="asc"):
-        params = {}
-        if resource_id:
-            params['resource_id'] = resource_id
-        if resource_type:
-            params['resource_type'] = resource_type
-        return self.api_request('notes',params=params)
+    def get_notes(self, resource_id, resource_type="contact",order="asc"):
+        params = {
+            'resource_id' : resource_id,
+            'resource_type' : resource_type
+        }
+        return self.api_request('notes',params=params, extract_key='status_updates')
 
     def get_tags(self, document_type=None):
         params = {}

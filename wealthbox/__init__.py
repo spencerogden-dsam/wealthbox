@@ -69,14 +69,14 @@ class WealthBox(object):
     def get_tasks(self, resource_id=None, resource_type=None, assigned_to=None, completed=None,other_filters=None):
         default_params = {
             'resource_type' : 'contact',
-            'completed' : True,
+            'completed' : 'true',
             }
 
         called_params = {
             'resource_id': resource_id,
             'resource_type': resource_type,
             'assigned_to': assigned_to,
-            'completed': completed
+            'completed': completed if type(completed) =='bool' else None
             }
         other_filters = {} if other_filters is None else other_filters
         # Merge dicts and remove keys with None values

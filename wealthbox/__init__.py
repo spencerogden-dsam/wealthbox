@@ -98,7 +98,6 @@ class WealthBox(object):
         called_params = {k: v for k, v in called_params.items() if v is not None}
         
         p = {**default_params, **called_params}
-        print(f'Calling workflows with params: {p}')
         return self.api_request('workflows',params={**default_params, **called_params})
     
     def get_events(self, resource_id=None, resource_type='contact'):

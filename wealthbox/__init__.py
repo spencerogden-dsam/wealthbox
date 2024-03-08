@@ -66,7 +66,7 @@ class WealthBox(object):
     def get_contacts(self, filters=None):
         return self.api_request('contacts',params=filters)
 
-    def get_tasks(self, resource_id=None, resource_type='contact', assigned_to=None, completed=True,other_filters=None):
+    def get_tasks(self, resource_id=None, resource_type=None, assigned_to=None, completed=None,other_filters=None):
         default_params = {
             'resource_type' : 'contact',
             'completed' : True,

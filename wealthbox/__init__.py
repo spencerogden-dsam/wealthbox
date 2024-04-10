@@ -4,6 +4,7 @@ import requests
 import importlib.metadata
 __version__ = importlib.metadata.version("wealthbox")
 
+
 class WealthBox(object):
     def __init__(self, token=None):
         self.token = token

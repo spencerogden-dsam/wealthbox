@@ -2,7 +2,6 @@ from json import JSONDecodeError
 import requests
 
 import importlib.metadata
-
 __version__ = importlib.metadata.version("wealthbox")
 
 class WealthBox(object):

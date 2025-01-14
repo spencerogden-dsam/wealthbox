@@ -23,7 +23,7 @@ class WealthBox(object):
         if params is None:
             params = {}
         
-        params.setdefault('per_page', '5000')
+        params.setdefault('per_page', '500')
         results = []
 
         extract_key = extract_key if extract_key is not None else endpoint
